@@ -1,4 +1,5 @@
-﻿using Minesweeper.Services;
+﻿using Minesweeper.Models;
+using Minesweeper.Services;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -17,8 +18,7 @@ namespace Minesweeper.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "About";
-
+            ViewBag.Message = "About Page";
             return View();
         }
 

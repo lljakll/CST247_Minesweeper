@@ -15,7 +15,7 @@ namespace Minesweeper.Services
     /// Date:       02/20/19
     /// Version:    1.0.0
     /// </remarks>
-    public class ConnectionService
+    public class ConnectionService : IDisposable
     {
         // Class Properties
         public SqlConnection Connection { get; set; }
@@ -28,7 +28,7 @@ namespace Minesweeper.Services
             // Connection String to database
             // Note: In most cases, this would not be hardcoded here, but this should
             //       be fine for this project. We can move it later if necessary.
-            var connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\mrjay\Source\Repos\mrjaywilson\CST247_Minesweeper\Minesweeper\App_Data\minesweeper.mdf;Integrated Security=True";
+            var connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\minesweeper.mdf;Integrated Security=True";
 
             try
             {
@@ -38,6 +38,14 @@ namespace Minesweeper.Services
             {
                 // Exception Handling
             }
+        }
+
+        /// <summary>
+        /// Close the connection on destruction.
+        /// </summary>
+        public void Dispose()
+        {
+            Connection.Close();
         }
     }
 }
