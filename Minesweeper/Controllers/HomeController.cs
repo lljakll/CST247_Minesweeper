@@ -28,5 +28,10 @@ namespace Minesweeper.Controllers
 
             return View();
         }
+
+        public ActionResult CreateUser()
+        {
+            return View();
+        }
     }
 }
