@@ -2,18 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Minesweeper.Models
 {
     public class UserModel
     {
         // Properties
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public string Gender { get; set; }
+        [Required]
         public int Age { get; set; }
+        [Required]
         public string State { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
         public string Username { get; set; }
 
         // Read Only Property
