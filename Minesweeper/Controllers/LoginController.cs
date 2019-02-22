@@ -9,7 +9,7 @@ namespace Minesweeper.Controllers
     public class LoginController : Controller
     {
         // GET: Login
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View();
         }
@@ -36,12 +36,12 @@ namespace Minesweeper.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    return View("index");
+                    return View("Login");
                 }
 
                 // Actual Controller Stuff Can Go Here
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Home/Index");
             }
             catch
             {
