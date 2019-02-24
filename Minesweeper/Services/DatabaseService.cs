@@ -10,7 +10,12 @@ using System.Data.SqlClient;
 /// Descr.:     The DatabaseService Class provides CRUD for registration,
 ///             login, and future administration.
 /// 
-/// Author:     Jay Wilson
+/// Authors:    Jay Wilson
+///             Chase Hausman
+///             Jacki Adair
+///             Nathan Ford
+///             Richard Boyd
+///             
 /// Date:       02/21/19
 /// Version:    1.0.0
 /// </remarks>

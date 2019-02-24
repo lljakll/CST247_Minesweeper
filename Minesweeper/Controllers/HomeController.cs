@@ -1,27 +1,48 @@
-﻿using Minesweeper.Models;
-using Minesweeper.Services;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace Minesweeper.Controllers
 {
+    /// <summary>
+    /// HomeController Class
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// Descr.:     This controller handles the home page.
+    /// 
+    /// Authors:    Jay Wilson
+    ///             Chase Hausman
+    ///             Jacki Adair
+    ///             Nathan Ford
+    ///             Richard Boyd
+    ///             
+    /// Date:       02/21/19
+    /// Version:    1.0.0
+    /// </remarks>
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Go to index.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
         }
 
+        /// <summary>
+        /// Go to About Page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult About()
         {
             ViewBag.Message = "About Page";
             return View();
         }
 
+        /// <summary>
+        /// Go to Contact Page
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -29,7 +50,11 @@ namespace Minesweeper.Controllers
             return View();
         }
 
-        public ActionResult CreateUser()
+        /// <summary>
+        /// Go to sign in page.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Login()
         {
             return View();
         }
