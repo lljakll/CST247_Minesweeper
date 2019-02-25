@@ -57,7 +57,7 @@ namespace Minesweeper.Services
                     command.Parameters.Add("@state", SqlDbType.VarChar, 20).Value = user.State;
                     command.Parameters.Add("@email", SqlDbType.VarChar, 50).Value = user.Email;
 
-                    // Prepate the statement.
+                    // Prepare the statement.
                     command.Prepare();
 
                     // Execute the statement.

@@ -21,7 +21,15 @@
                         @Html.ValidationMessage("password")
                     </fieldset>
                     <fieldset class="form-group">
-                        <button type="submit" class="btn btn-success" value="Login">Login</button>
+                        <div class="col">
+                            <button type="submit" class="btn btn-success" value="Login">Login</button>
+                        </div>
+                        <br />
+                        <div class="col">
+                            <a href="@Url.Action("Index", "Registration")">
+                                New To Minesweeper? Register here!
+                            </a>
+                        </div>
                     </fieldset>
                 </div>
             </div>

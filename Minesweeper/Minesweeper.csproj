@@ -272,6 +272,8 @@
     <Content Include="Views\Login\Failure.cshtml" />
     <Content Include="Views\Login\Success.cshtml" />
     <Content Include="Views\Registration\Index.cshtml" />
+    <Content Include="Views\Registration\Failure.cshtml" />
+    <Content Include="Views\Registration\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\DatabaseService\" />
