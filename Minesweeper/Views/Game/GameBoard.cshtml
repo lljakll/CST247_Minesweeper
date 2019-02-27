@@ -1,5 +1,16 @@
 ﻿@model Minesweeper.Models.BoardModel
 
-@{ 
-    
-}
+
+<table>
+    @for(int i = 0; i < ViewBag.Height; i++)
+    {
+        <tr>
+            @for(int j = 0; j < ViewBag.Width; j++)
+            {
+            <td>
+                <input type="button"/>
+            </td>
+            }
+        </tr>
+    }
+</table>
