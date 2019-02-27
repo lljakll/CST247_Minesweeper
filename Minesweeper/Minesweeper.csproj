@@ -134,6 +134,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BoardModel.cs" />
     <Compile Include="Models\CellModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -275,7 +276,7 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Registration\Failure.cshtml" />
     <Content Include="Views\Registration\Success.cshtml" />
-    <Content Include="Views\Game\View.cshtml" />
+    <Content Include="Views\Game\GameBoard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\DatabaseService\" />

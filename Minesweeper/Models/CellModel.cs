@@ -7,9 +7,9 @@ namespace Minesweeper.Models
 {
     public class CellModel
     {
-        private int LiveNeighbors { get; set; }
-        private bool IsLive { get; set; }
-        private bool Visited { get; set; }
+        public int LiveNeighbors { get; set; }
+        public bool IsLive { get; set; }
+        public bool Visited { get; set; }
 
         public CellModel()
         {
