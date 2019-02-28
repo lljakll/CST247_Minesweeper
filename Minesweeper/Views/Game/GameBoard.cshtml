@@ -1,0 +1,13 @@
+﻿<table>
+    @for (int i = 0; i < ViewBag.Size; i++)
+    {
+        <tr>
+            @for (int j = 0; j < ViewBag.Size; j++)
+            {
+                <td>
+                    <input name="location_@i@j" type="submit" value="@i@j" class="btn-lg" />
+                </td>
+            }
+        </tr>
+    }
+</table> 
