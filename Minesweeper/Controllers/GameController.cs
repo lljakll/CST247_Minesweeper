@@ -19,7 +19,7 @@ namespace Minesweeper.Controllers
         
         public ActionResult Game(int size)
         {
-            /*
+            BoardModel game = new BoardModel(size);
             var id = "";
 
             try
@@ -36,8 +36,7 @@ namespace Minesweeper.Controllers
             {
                 // No value.
             }
-            */
-            BoardModel game = new BoardModel(size);
+
 
             ViewBag.Size = game.Size;
             ViewBag.Board = game.GameBoard;
@@ -47,6 +46,20 @@ namespace Minesweeper.Controllers
             //ViewBag.Y = new int();
 
             return View();
+        }
+
+        // POST
+        public ActionResult LeftClick(FormCollection form)
+        {
+            string status = "Left click on cell (" + form["row"] + ", " + form["column"] + ").";
+            return Json(new { found = true, row = form["row"], column = form["column"], message = status });
+        }
+
+        // POST
+        public ActionResult RightClick(FormCollection form)
+        {
+            string status = "Right click on cell (" + form["row"] + ", " + form["column"] + ").";
+            return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
     }
 }
