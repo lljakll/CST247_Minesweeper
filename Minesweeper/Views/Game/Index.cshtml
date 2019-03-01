@@ -23,7 +23,8 @@
 
             $.post("@Url.Action("RightClick", "Game")", {
                 "row": cell.data("row"),
-                "column": cell.data("column")
+                "column": cell.data("column"),
+
             }, function (response) {
                 statusDisplay.show().html(response.message);
             }, 'json');
@@ -35,7 +36,8 @@
 
             $.post("@Url.Action("LeftClick", "Game")", {
                 "row": cell.data("row"),
-                "column": cell.data("column")
+                "column": cell.data("column"),
+                "live": cell.data("live")
             }, function (response) {
                 statusDisplay.show().html(response.message);
             }, 'json');

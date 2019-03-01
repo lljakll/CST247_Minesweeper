@@ -35,6 +35,9 @@ namespace Minesweeper.Controllers
 
             ViewBag.Size = game.Size;
             ViewBag.Board = game.GameBoard;
+
+
+
             //ViewBag.Location = new int[game.Size, game.Size];
 
             //ViewBag.X = new int();
@@ -44,16 +47,22 @@ namespace Minesweeper.Controllers
         }
 
         // POST
-        public ActionResult LeftClick(FormCollection form)
+        public ActionResult RightClick(FormCollection form)
         {
-            string status = "Left click on cell (" + form["row"] + ", " + form["column"] + ").";
+
+            string status = "Right clicked on cell (" + form["row"] + ", " + form["column"] + ").";
             return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
 
         // POST
-        public ActionResult RightClick(FormCollection form)
+        public ActionResult LeftClick(FormCollection form)
         {
-            string status = "Right click on cell (" + form["row"] + ", " + form["column"] + ").";
+            string status;
+
+            if (form["live"] == "True")
+                status = "You are dead!  This Cell was Live!";
+            else
+                status = "Left clicked on cell (" + form["row"] + ", " + form["column"] + ").";
             return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
     }

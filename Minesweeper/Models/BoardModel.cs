@@ -27,6 +27,24 @@ namespace Minesweeper.Models
                     GameBoard[i, j] = new CellModel();
                 }
             }
+
+            Activate();
+        }
+
+        private void Activate()
+        {
+            Random rnd = new Random();
+
+            for (int i = 0; i < .2 * GameBoard.Length; i++)
+            {
+                int rndRow = rnd.Next(0, GameBoard.GetLength(0));
+                int rndCol = rnd.Next(0, GameBoard.GetLength(1));
+
+                if (GameBoard[rndRow, rndCol].IsLive == false)
+                    GameBoard[rndRow, rndCol].IsLive = true;
+                else
+                    i--;
+            }
         }
 
         private void SetLiveNeighbors()
