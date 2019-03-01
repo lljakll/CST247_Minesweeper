@@ -16,11 +16,10 @@ namespace Minesweeper.Controllers
         {
             return View();
         }
-
-        [HttpPost]
+        
         public ActionResult Game(int size)
         {
-
+            /*
             var id = "";
 
             try
@@ -37,8 +36,8 @@ namespace Minesweeper.Controllers
             {
                 // No value.
             }
-
-            // BoardModel game = new BoardModel(7);
+            */
+            BoardModel game = new BoardModel(size);
 
             ViewBag.Size = game.Size;
             ViewBag.Board = game.GameBoard;
