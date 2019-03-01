@@ -42,5 +42,19 @@ namespace Minesweeper.Controllers
 
             return View();
         }
+
+        // POST
+        public ActionResult LeftClick(FormCollection form)
+        {
+            string status = "Left click on cell (" + form["row"] + ", " + form["column"] + ").";
+            return Json(new { found = true, row = form["row"], column = form["column"], message = status });
+        }
+
+        // POST
+        public ActionResult RightClick(FormCollection form)
+        {
+            string status = "Right click on cell (" + form["row"] + ", " + form["column"] + ").";
+            return Json(new { found = true, row = form["row"], column = form["column"], message = status });
+        }
     }
 }

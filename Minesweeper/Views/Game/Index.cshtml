@@ -2,10 +2,48 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Minesweeper Game</h2>
 <body>
+    <div class="alert alert-info" id="ajax-status"></div>
+
     @using (Html.BeginForm("Index", "Game", FormMethod.Post))
     {
         @Html.Partial("GameBoard");
     }
 </body>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var statusDisplay = $("#ajax-status");
+
+        $(".cell-btn").contextmenu(function (e) {
+            e.preventDefault();
+            var cell = $(e.currentTarget);
+
+            $.post("@Url.Action("RightClick", "Game")", {
+                "row": cell.data("row"),
+                "column": cell.data("column")
+            }, function (response) {
+                statusDisplay.show().html(response.message);
+            }, 'json');
+        });
+
+        $(".cell-btn").click(function (e) {
+            e.preventDefault();
+            var cell = $(e.currentTarget);
+
+            $.post("@Url.Action("LeftClick", "Game")", {
+                "row": cell.data("row"),
+                "column": cell.data("column")
+            }, function (response) {
+                statusDisplay.show().html(response.message);
+            }, 'json');
+        });
+
+        $(document).ready(function () {
+            console.log(statusDisplay);
+            statusDisplay.hide();
+        });
+    </script>
+}
