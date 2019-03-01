@@ -14,6 +14,13 @@ namespace Minesweeper.Controllers
         // GET: Game
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Game(int size)
+        {
+
             var id = "";
 
             try

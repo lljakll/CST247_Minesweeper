@@ -1,11 +1,14 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h3>Please select your difficulty setting.</h3>
 <body>
-    @using (Html.BeginForm("Index", "Game", FormMethod.Post))
-    {
-        @Html.Partial("GameBoard");
-    }
+    <ul>
+        <li>@Html.ActionLink("Easy", "Game", new { x = 15 });</li>
+        <li>@Html.ActionLink("Medium", "Game", new { x = 20 });</li>
+        <li>@Html.ActionLink("Hard", "Game", new { x = 25 });</li>
+    </ul>
 </body>
+
