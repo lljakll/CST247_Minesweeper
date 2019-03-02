@@ -79,5 +79,12 @@ namespace Minesweeper.Models
             }
             return 0;
         }
+
+        private int ChangeIcon()
+        {
+            int icon = 0;
+
+            return icon;
+        }
     }
 }

@@ -16,21 +16,6 @@ namespace Minesweeper.Models
             LiveNeighbors = 0;
             Visited = false;
 
-            // 20% chance for each cell to be live not 20% of cells live
-            // i ran into the issue where no cells were live due to this.
-            // corrected in the BoardModel Class Activate() method.
-            // SetIsLive();
-            
-        }
-
-        private void SetIsLive()
-        {
-            Random rand = new Random();
-            double chance = rand.NextDouble();
-            if (chance < .5)
-                IsLive = true;
-            else
-                IsLive = false;
         }
     }
 }
