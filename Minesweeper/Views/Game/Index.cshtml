@@ -17,6 +17,7 @@
     <script type="text/javascript">
         var statusDisplay = $("#ajax-status");
 
+
         $(".cell-btn").contextmenu(function (e) {
             e.preventDefault();
             var cell = $(e.currentTarget);
@@ -37,9 +38,11 @@
             $.post("@Url.Action("LeftClick", "Game")", {
                 "row": cell.data("row"),
                 "column": cell.data("column"),
-                "live": cell.data("live")
+                "live": cell.data("live"),
+                "neighbors": cell.data("neighbors")
             }, function (response) {
-                statusDisplay.show().html(response.message);
+                    statusDisplay.show().html(response.message);
+
             }, 'json');
         });
 

@@ -14,6 +14,7 @@ namespace Minesweeper.Models
         {
             Size = size;
             SetUpBoard();
+            ActivateLiveCells();
             SetLiveNeighbors();
         }
 
@@ -27,11 +28,9 @@ namespace Minesweeper.Models
                     GameBoard[i, j] = new CellModel();
                 }
             }
-
-            Activate();
         }
 
-        private void Activate()
+        private void ActivateLiveCells()
         {
             Random rnd = new Random();
 

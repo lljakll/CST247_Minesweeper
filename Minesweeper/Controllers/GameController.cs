@@ -49,8 +49,8 @@ namespace Minesweeper.Controllers
         // POST
         public ActionResult RightClick(FormCollection form)
         {
-
-            string status = "Right clicked on cell (" + form["row"] + ", " + form["column"] + ").";
+            // F for flag.  Figure out how to place a picture
+            string status = "F";
             return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
 
@@ -60,9 +60,9 @@ namespace Minesweeper.Controllers
             string status;
 
             if (form["live"] == "True")
-                status = "You are dead!  This Cell was Live!";
+                status = "X"; // X for explosion
             else
-                status = "Left clicked on cell (" + form["row"] + ", " + form["column"] + ").";
+                status = form["neighbors"];  // number of live neighbors
             return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
     }
