@@ -65,7 +65,7 @@ namespace Minesweeper.Controllers
             // set cells visited flag when left clicked
             game.GameBoard[int.Parse(form["row"]), int.Parse(form["column"])].Visited = true;
 
-            // Display 'x' if live, else return LiveNeighbors
+            
             // TODO: Incorporate an explosiion pic using css background .addClass()/.removeClass() jQuery 
             if (game.GameBoard[int.Parse(form["row"]), int.Parse(form["column"])].IsLive == true)
             {
@@ -75,16 +75,19 @@ namespace Minesweeper.Controllers
 
             else
             {
-                // TODO: display all open cells connected to this cell and number of live cells on cells at the border of this "wave"
+                // TODO: display all cascaded celle and number of live cells on cells at the border of this "wave"
 
                 // sets message if not dead
                 if (game.GameBoard[int.Parse(form["row"]), int.Parse(form["column"])].LiveNeighbors == 0)
                 {
-                    status = "(" + form["row"] + ", " + form["column"] + ") is clear.  Opening up all surrounding cells that are not mined.";
+                    status = "(" + form["row"] + ", " + form["column"] + ") is clear.  Opening up all surrounding cells that have no live neighbors.";
+                    
+                    // Call the Cascade method in the BoardModel class
+                    game.Cascade(int.Parse(form["row"]), int.Parse(form["column"]));
                 }
                 else
                 {
-                    // TODO: Add in logic to change the icon on the button , expose  the field of nonlive/no live neighbors and wait for another click. also need to add a custom click graphic to change the clicked buttons so they are visible.  color maybe?
+                    // TODO: Add in logic to change the icon on the button , need to add a custom click graphic to change the clicked buttons so they are visible.  color maybe?
 
                     status = "(" + form["row"] + ", " + form["column"] + ") has " + game.GameBoard[int.Parse(form["row"]),int.Parse(form["column"])].LiveNeighbors + " live neighbors.";
                 }
@@ -93,8 +96,7 @@ namespace Minesweeper.Controllers
             }
 
             // Return message to view
-            // need to remove this and use .text() jQuery update to update the cell markings or something like that.
-
+          
             return Json(new { found = true, row = form["row"], column = form["column"], message = status });
         }
     }

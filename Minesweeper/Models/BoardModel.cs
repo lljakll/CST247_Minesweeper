@@ -86,5 +86,34 @@ namespace Minesweeper.Models
 
             return icon;
         }
+
+        public void Cascade(int row, int col)
+        {
+            GameBoard[row, col].Visited = true;
+
+            if (GameBoard[row, col].LiveNeighbors == 0)
+            {
+                // iterate through each neighbor
+                for (int i = -1; i < 2; i++)
+                {
+                    for (int k = -1; k < 2; k++)
+                    {
+                        // make sure to stay inbounds
+                        if (row + i >= 0 && row + i < GameBoard.GetLength(0) && col + k >= 0 && col + k < GameBoard.GetLength(1))
+                        {
+                            // if a neighbor has not been visited
+                            if (GameBoard[row + i, col + k].Visited == false)
+                            {
+                                // recursiely check that cell's neighbors...
+                                Cascade(row + i, col + k);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+                // if the cell has neighbors, back out of the recursion iteration
+                return;
+        }
     }
 }
