@@ -137,11 +137,14 @@
     </Compile>
     <Compile Include="Models\BoardModel.cs" />
     <Compile Include="Models\CellModel.cs" />
+    <Compile Include="Models\Game\Cell.cs" />
+    <Compile Include="Models\Game\Grid.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\IDatabase.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\minesweeper.mdf" />

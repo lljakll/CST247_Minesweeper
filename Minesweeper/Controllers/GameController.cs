@@ -1,46 +1,126 @@
-﻿using System;
+﻿using Minesweeper.Services.Business;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Minesweeper.Models;
 
+/// <summary>
+/// Game Controller Class
+/// </summary>
+/// 
+/// <remarks>
+/// Descr.:     hanldes the game logic
+/// 
+/// Authors:    Jay Wilson
+///             Chase Hausman
+///             Jacki Adair
+///             Nathan Ford
+///             Richard Boyd
+///             
+/// Date:       02/21/19
+/// Version:    1.0.0
+/// </remarks>
 namespace Minesweeper.Controllers
 {
     public class GameController : Controller
     {
-        BoardModel game = new BoardModel(7);
-
         // GET: Game
         public ActionResult Index()
         {
-            var id = "";
+            //create user service
+            UserService userService = new UserService();
 
-            try
+            //check if user is logged in
+            if (userService.loggedIn(this))
             {
-                id = Request.Params
-                        .Cast<string>()
-                        .Where(p => p.StartsWith("location"))
-                        .Select(p => p.Substring("location".Length + 1))
-                        .First();
 
-                System.Console.WriteLine(id);
+                //create game service object
+                GameService gameService = new GameService();
+
+                //load grid for user
+                Grid g = gameService.findGrid(this);
+
+                //check if user has an existing grid saved in db
+                if (g != null)
+                {
+                    //grid exists for user
+
+
+                    /*if (g.GameOver)
+                    {
+                        //regenerate new grid
+                    }*/
+
+                }
+                else
+                {
+                    //generate a grid for user
+                    g = gameService.createGrid(this, GameConfig.WIDTH, GameConfig.HEIGHT);
+                }
+
+
+                //return game board view with grid model
+                return View("Game", g);
+
             }
-            catch
+
+            else
             {
-                // No value.
+                //user isn't logged in
+                Error e = new Error("You must be logged in to access this page.");
+
+                return View("Error", e);
             }
+        }
 
-            // BoardModel game = new BoardModel(7);
 
-            ViewBag.Size = game.Size;
-            ViewBag.Board = game.GameBoard;
-            //ViewBag.Location = new int[game.Size, game.Size];
+        //cell click form handle
+        [HttpPost]
+        public ActionResult activateCell(String id, String x, String y)
+        {
 
-            //ViewBag.X = new int();
-            //ViewBag.Y = new int();
+            //create userservice
+            UserService userService = new UserService();
 
-            return View();
+            //check if user is logged in
+            if (userService.loggedIn(this))
+            {
+                //update cell components
+                GameService gameService = new GameService();
+
+                //load user grid from db
+                Grid g = gameService.findGrid(this);
+
+                //activate cell logic
+                gameService.activateCell(g, int.Parse(x), int.Parse(y));
+
+                //return same view
+                return Index();
+            }
+            else
+            {
+                //user not logged in
+                Error e = new Error("You must be logged in to access this page.");
+
+                return View("Error", e);
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult resetGrid()
+        {
+            //deletes grid from db
+
+            GameService gameService = new GameService();
+            gameService.removeGrid(this);
+
+            //returns view
+            return Index();
+
+
+
         }
     }
 }
