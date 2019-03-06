@@ -5,47 +5,103 @@ using System.Web;
 
 namespace Minesweeper.Models.Game
 {
-    /// <summary>
-    /// Grid Class
-    /// </summary>
-    /// 
-    /// <remarks>
-    /// Descr.:     Handles the Grid
-    /// 
-    /// Authors:    Jay Wilson
-    ///             Chase Hausman
-    ///             Jacki Adair
-    ///             Nathan Ford
-    ///             Richard Boyd
-    ///             
-    /// Date:       02/21/19
-    /// Version:    1.0.0
-    /// </remarks>
     public class Grid
     {
-        private int id;
-        private int rows;
-        private int cols;
-        private int userid;
-        private Boolean gameOver;
-        private Cell[,] cells;
+        public int Id { get; set; }
+        public int Rows { get; set; }
+        public int Cols { get; set; }
+        public int UserId { get; set; }
+        public bool GameOver { get; set; }
+        public Cell[,] Cells { get; set; }
 
-        /** Grid model class **/
-
-        public Grid(int id, int rows, int cols, int userid, bool gameOver)
+        public Grid(int id, int rows, int cols, int userId, bool gameOver)
         {
-            this.id = id;
-            this.rows = rows;
-            this.cols = cols;
-            this.userid = userid;
-            this.gameOver = gameOver;
+            Id = id;
+            Rows = rows;
+            Cols = cols;
+            UserId = userId;
+            GameOver = gameOver;
         }
 
-        public int Id { get => id; set => id = value; }
-        public int Rows { get => rows; set => rows = value; }
-        public int Cols { get => cols; set => cols = value; }
-        public int Userid { get => userid; set => userid = value; }
-        public bool GameOver { get => gameOver; set => gameOver = value; }
-        public Cell[,] Cells { get => cells; set => cells = value; }
+        public void SetLiveCount()
+        {
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Cols; j++)
+                {
+                    // North (-1, 0)
+                    if (i - 1 >= 0)
+                    {
+                        if (Cells[i - 1, j].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // NorthWest (-1, -1)
+                    if (i - 1 >= 0 && j - 1 >= 0)
+                    {
+                        if (Cells[i - 1, j - 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // NorthEast (-1, +1)
+                    if (i - 1 >= 0 && j + 1 < Cols)
+                    {
+                        if (Cells[i - 1, j + 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // South (+1, 0)
+                    if (i + 1 < Rows)
+                    {
+                        if (Cells[i + 1, j].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // SouthWest (+1, -1)
+                    if (i + 1 < Rows && j - 1 >= 0)
+                    {
+                        if (Cells[i + 1, j - 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // SouthEast (+1, +1)
+                    if (i + 1 < Rows && j + 1 < Cols)
+                    {
+                        if (Cells[i + 1, j + 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // Check East (0, +1)
+                    if (j + 1 < Cols)
+                    {
+                        if (Cells[i, j + 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+
+                    // Check West (0, -1)
+                    if (j - 1 >= 0)
+                    {
+                        if (Cells[i, j - 1].Live == true)
+                        {
+                            Cells[i, j].LiveNeighbors += 1;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

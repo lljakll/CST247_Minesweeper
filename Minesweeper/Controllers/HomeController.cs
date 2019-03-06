@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using Minesweeper.Constants;
+using System.Web.Mvc;
 
 namespace Minesweeper.Controllers
 {
@@ -57,6 +58,13 @@ namespace Minesweeper.Controllers
         public ActionResult Login()
         {
             return View();
+        }
+
+        public ActionResult Game()
+        {
+            Globals.Grid = new Models.Game.Grid(0, 10, 10, 0, false);
+
+            return RedirectToAction("Index", "Game");
         }
     }
 }

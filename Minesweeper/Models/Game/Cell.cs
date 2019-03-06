@@ -5,60 +5,39 @@ using System.Web;
 
 namespace Minesweeper.Models.Game
 {
-    /// <summary>
-    /// Cell Class
-    /// </summary>
-    /// 
-    /// <remarks>
-    /// Descr.:     Cell class that handles the Cells
-    /// 
-    /// Authors:    Jay Wilson
-    ///             Chase Hausman
-    ///             Jacki Adair
-    ///             Nathan Ford
-    ///             Richard Boyd
-    ///             
-    /// Date:       02/21/19
-    /// Version:    1.0.0
-    /// </remarks>
     public class Cell
     {
-        /** Cell model class **/
+        public int Id { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int LiveNeighbors { get; set; }
+        public bool Visited { get; set; }
+        public bool Live { get; set; }
 
-        private int id;
-        private int x;
-        private int y;
-        private int liveNeighbors;
-        private Boolean visited;
-        private Boolean bomb;
-        
+        // Handle ID?
 
-
-        public Cell()
+        public Cell(int x = -1, int y = -1)
         {
-            id = -1;
-            x = -1;
-            y = -1;
-            liveNeighbors = 0;
-            visited = false;
-            bomb = false;
+            Reset(x, y);
         }
 
-        public Cell(int x, int y)
+        public void Reset(int x, int y)
         {
-            id = -1;
-            this.x = x;
-            this.y = y;
-            liveNeighbors = 0;
-            visited = false;
-            bomb = false;
+            X = x;
+            Y = y;
+            Visited = false;
+            Live = false;
+            LiveNeighbors = 0;
         }
 
-        public int Id { get => id; set => id = value; }
-        public int X { get => x; set => x = value; }
-        public int Y { get => y; set => y = value; }
-        public int LiveNeighbors { get => liveNeighbors; set => liveNeighbors = value; }
-        public bool Visited { get => visited; set => visited = value; }
-        public bool Bomb { get => bomb; set => bomb = value; }
+
+        // May not need this
+        public void Reveal()
+        {
+            if (LiveNeighbors == 0)
+            {
+
+            }
+        }
     }
 }

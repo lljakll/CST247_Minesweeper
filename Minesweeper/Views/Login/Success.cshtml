@@ -1,12 +1,13 @@
-﻿
-<head>
-    <meta http-equiv="refresh" content="3;@Url.Action("Index", "Home")" />
+﻿<head>
+    <meta http-equiv="refresh" content="3;@Url.Action("Game", "Home")" />
 </head>
 
 @{
     ViewBag.Title = "Success";
 }
 
-<h2><em>LOGIN SUCCESSFUL!</em></h2>
+<h2><em>Welcome Back, @Model.FirstName!</em></h2>
+
 <br /><br />
-<h4><em>Redirecting to index in 3 seconds...</em></h4>
+
+<h4><em>Starting new minesweeper game!</em></h4>

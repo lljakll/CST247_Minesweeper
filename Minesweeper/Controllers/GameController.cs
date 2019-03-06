@@ -1,26 +1,12 @@
-﻿using Minesweeper.Services.Business;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Minesweeper.Constants;
+using Minesweeper.Models;
+using Minesweeper.Models.Game;
 
-/// <summary>
-/// Game Controller Class
-/// </summary>
-/// 
-/// <remarks>
-/// Descr.:     hanldes the game logic
-/// 
-/// Authors:    Jay Wilson
-///             Chase Hausman
-///             Jacki Adair
-///             Nathan Ford
-///             Richard Boyd
-///             
-/// Date:       02/21/19
-/// Version:    1.0.0
-/// </remarks>
 namespace Minesweeper.Controllers
 {
     public class GameController : Controller
@@ -28,99 +14,281 @@ namespace Minesweeper.Controllers
         // GET: Game
         public ActionResult Index()
         {
-            //create user service
-            UserService userService = new UserService();
-
-            //check if user is logged in
-            if (userService.loggedIn(this))
+            if (Globals.Grid.GameOver == false)
             {
+                Grid grid = CreateGrid(Globals.Grid.Rows, Globals.Grid.Rows);
+            }
 
-                //create game service object
-                GameService gameService = new GameService();
+            return View("Game", Globals.Grid);
+        }
 
-                //load grid for user
-                Grid g = gameService.findGrid(this);
+        //// GET: Game
+        //public ActionResult Index(int size)
+        //{
+        //    Grid grid = createGrid(size, size);
 
-                //check if user has an existing grid saved in db
-                if (g != null)
+        //    return View("Game", TEMP.grid);
+        //}
+
+        public Grid CreateGrid(int width, int height)
+        {
+            // Grid(id, w, h, userid, gameover)
+            Globals.Grid = new Grid(0, width, height, 0, false);
+            Cell[,] cells = new Cell[width, height];
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
                 {
-                    //grid exists for user
+                    cells[x, y] = new Cell(x, y);
+                }
+            }
 
+            // Activate the cells
+            ActivateCells(20, width, height, cells, Globals.Grid);
+            Globals.Grid.GameOver = false;
 
-                    /*if (g.GameOver)
-                    {
-                        //regenerate new grid
-                    }*/
+            // Pass Grid to datalayer??
 
+            return Globals.Grid;
+        }
+
+        public void ActivateCells(int percentage, int width, int height, Cell[,] mineField, Grid grid)
+        {
+            Random random = new Random();
+
+            int TotalLiveCount = 0;
+
+            if (percentage > 100 || percentage < 1)
+            {
+                percentage = 20;
+            }
+            else
+            {
+                percentage = (int)((width * height) * (percentage / 100.00));
+
+                TotalLiveCount = percentage;
+            }
+
+            while (percentage > 0)
+            {
+                var cell = mineField[
+                    random.Next(0, width),
+                    random.Next(0, height)];
+
+                if (cell.Live == false)
+                {
+                    cell.Live = true;
+                    percentage -= 1;
                 }
                 else
                 {
-                    //generate a grid for user
-                    g = gameService.createGrid(this, GameConfig.WIDTH, GameConfig.HEIGHT);
+                    continue;
                 }
-
-
-                //return game board view with grid model
-                return View("Game", g);
-
             }
 
-            else
-            {
-                //user isn't logged in
-                Error e = new Error("You must be logged in to access this page.");
+            grid.Cells = mineField;
 
-                return View("Error", e);
-            }
+            grid.SetLiveCount();
         }
 
+        //public ActionResult
 
-        //cell click form handle
         [HttpPost]
-        public ActionResult activateCell(String id, String x, String y)
+        public ActionResult ActivateCell(string id, string x, string y)
         {
+            int X = int.Parse(x.Trim());
+            int Y = int.Parse(y.Trim());
 
-            //create userservice
-            UserService userService = new UserService();
+            Cell cell = Globals.Grid.Cells[X, Y];
 
-            //check if user is logged in
-            if (userService.loggedIn(this))
+            cell.Visited = true;
+
+            if (cell.Live)
             {
-                //update cell components
-                GameService gameService = new GameService();
+                //for (int i = 0; i < Globals.Grid.Rows; i++)
+                //{
+                //    for (int j = 0; j < Globals.Grid.Cols; j++)
+                //    {
+                //        Globals.Grid.Cells[X, Y].Visited = true;
+                //    }
+                //}
 
-                //load user grid from db
-                Grid g = gameService.findGrid(this);
+                EndGame();
 
-                //activate cell logic
-                gameService.activateCell(g, int.Parse(x), int.Parse(y));
-
-                //return same view
                 return Index();
+
+                // System.Diagnostics.Debug.WriteLine("Hit bomb at: " + X + ", " + Y);
             }
             else
             {
-                //user not logged in
-                Error e = new Error("You must be logged in to access this page.");
+                if (cell.LiveNeighbors == 0)
+                {
+                    revealSurroundingCells(Globals.Grid, cell.X, cell.Y);
+                }
+            }
 
-                return View("Error", e);
+            return View("Game", Globals.Grid);
+        }
+
+        private ActionResult EndGame()
+        {
+            RevealAll();
+
+            return Index();
+        }
+
+        private void RevealAll()
+        {
+            Grid g = Globals.Grid;
+
+            g.GameOver = true;
+
+            for (int i = 0; i < g.Rows; i++)
+            {
+                for (int j = 0; j < g.Cols; j++)
+                {
+                    g.Cells[i, j].Visited = true;
+                }
             }
         }
 
+        private bool revealSurroundingCells(Grid grid, int x, int y)
+        {
+            Cell cell = grid.Cells[x, y];
+            cell.Visited = true;
+
+            //grid.Cells[x, y].Reveal();
+            // visted count
+
+            if (cell.LiveNeighbors > 0)
+            {
+                return false;
+            }
+
+            if (cell.Y - 1 >= 0)
+            {
+                var westLocation = grid.Cells[cell.X, cell.Y - 1];
+
+                if (!westLocation.Live && !westLocation.Visited)
+                {
+                    if (westLocation.LiveNeighbors == 0)
+                    {
+                        revealSurroundingCells(grid, westLocation.X, westLocation.Y);
+                    }
+                    else
+                    {
+                        westLocation.Visited = true;
+                        //westLocation.Reveal();
+                        //vistedCount += 1;
+                        // Update Score
+                    }
+                }
+            }
+
+            if (cell.X - 1 >= 0)
+            {
+                var northLocation = grid.Cells[cell.X - 1, cell.Y];
+
+                if (!northLocation.Live && !northLocation.Visited)
+                {
+                    if (northLocation.LiveNeighbors == 0)
+                    {
+                        revealSurroundingCells(grid, northLocation.X, northLocation.Y);
+                    }
+                    else
+                    {
+                        northLocation.Visited = true;
+                        //westLocation.Reveal();
+                        //vistedCount += 1;
+                        // Update Score
+                    }
+                }
+            }
+
+            if (cell.Y + 1 < grid.Cols)
+            {
+                var southLocation = grid.Cells[cell.X, cell.Y + 1];
+
+                if (!southLocation.Live && !southLocation.Visited)
+                {
+                    if (southLocation.LiveNeighbors == 0)
+                    {
+                        revealSurroundingCells(grid, southLocation.X, southLocation.Y);
+                    }
+                    else
+                    {
+                        southLocation.Visited = true;
+                        //westLocation.Reveal();
+                        //vistedCount += 1;
+                        // Update Score
+                    }
+                }
+            }
+
+            if (cell.X + 1 < grid.Rows)
+            {
+                var eastLocation = grid.Cells[cell.X + 1, cell.Y];
+
+                if (!eastLocation.Live && !eastLocation.Visited)
+                {
+                    if (eastLocation.LiveNeighbors == 0)
+                    {
+                        revealSurroundingCells(grid, eastLocation.X, eastLocation.Y);
+                    }
+                    else
+                    {
+                        eastLocation.Visited = true;
+                        //westLocation.Reveal();
+                        //vistedCount += 1;
+                        // Update Score
+                    }
+                }
+            }
+
+            return false;
+        }
 
         [HttpGet]
-        public ActionResult resetGrid()
+        public ActionResult ResetGrid()
         {
-            //deletes grid from db
+            int size = Globals.Grid.Rows;
 
-            GameService gameService = new GameService();
-            gameService.removeGrid(this);
+            Globals.Grid = new Grid(0, size, size, 0, false);
 
             //returns view
             return Index();
-
-
-
         }
+
+        [HttpGet]
+        public ActionResult SetDifficulty(string difficulty)
+        {
+            Globals.Grid.GameOver = false;
+
+            int size = 10;
+
+            switch (difficulty)
+            {
+                case "Easy":
+                    size = 10;
+                    break;
+                case "Medium":
+                    size = 15;
+                    break;
+                case "Hard":
+                    size = 20;
+                    break;
+            }
+            Globals.Grid = new Grid(0, size, size, 0, false);
+
+            //returns view
+            return Index();
+        }
+
+        public ActionResult RightClick()
+        {
+            return View("None");
+        }
+
     }
 }

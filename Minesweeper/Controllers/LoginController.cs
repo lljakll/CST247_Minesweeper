@@ -89,7 +89,7 @@ namespace Minesweeper.Controllers
                 // If user name and password match input, then success!
                 if (user.Username.Equals(username) && user.Password.Equals(password))
                 {
-                    return View("Success");
+                    return View("Success", user);
                 }
             }
             catch

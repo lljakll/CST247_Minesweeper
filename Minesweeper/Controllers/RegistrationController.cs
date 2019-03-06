@@ -1,22 +1,6 @@
 ﻿using Minesweeper.Services;
 using System.Web.Mvc;
 
-/// <summary>
-/// Registration Controller Class
-/// </summary>
-/// 
-/// <remarks>
-/// Descr.:     Handles Registration
-/// 
-/// Authors:    Jay Wilson
-///             Chase Hausman
-///             Jacki Adair
-///             Nathan Ford
-///             Richard Boyd
-///             
-/// Date:       02/21/19
-/// Version:    1.0.0
-/// </remarks>
 namespace Minesweeper.Controllers
 {
     public class RegistrationController : Controller
