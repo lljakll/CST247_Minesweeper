@@ -168,27 +168,7 @@ namespace Minesweeper.Controllers
 
             if (cell.Y - 1 >= 0)
             {
-                var westLocation = grid.Cells[cell.X, cell.Y - 1];
-
-                if (!westLocation.Live && !westLocation.Visited)
-                {
-                    if (westLocation.LiveNeighbors == 0)
-                    {
-                        revealSurroundingCells(grid, westLocation.X, westLocation.Y);
-                    }
-                    else
-                    {
-                        westLocation.Visited = true;
-                        //westLocation.Reveal();
-                        //vistedCount += 1;
-                        // Update Score
-                    }
-                }
-            }
-
-            if (cell.X - 1 >= 0)
-            {
-                var northLocation = grid.Cells[cell.X - 1, cell.Y];
+                var northLocation = grid.Cells[cell.X, cell.Y - 1];
 
                 if (!northLocation.Live && !northLocation.Visited)
                 {
@@ -204,6 +184,67 @@ namespace Minesweeper.Controllers
                         // Update Score
                     }
                 }
+            }
+
+            if (cell.X - 1 >= 0)
+            {
+                var westLocation = grid.Cells[cell.X - 1, cell.Y];
+
+                if (!westLocation.Live && !westLocation.Visited)
+                {
+                    if (westLocation.LiveNeighbors == 0)
+                    {
+                        revealSurroundingCells(grid, westLocation.X, westLocation.Y);
+                    }
+                    else
+                    {
+                        westLocation.Visited = true;
+                        //westLocation.Reveal();
+                        //vistedCount += 1;
+                        // Update Score
+                    }
+                }
+
+                if (cell.Y + 1 < grid.Cols)
+                {
+                    var southwestLocation = grid.Cells[cell.X - 1, cell.Y + 1];
+
+                    if (!southwestLocation.Live && !southwestLocation.Visited)
+                    {
+                        if (southwestLocation.LiveNeighbors == 0)
+                        {
+                            revealSurroundingCells(grid, southwestLocation.X, southwestLocation.Y);
+                        }
+                        else
+                        {
+                            southwestLocation.Visited = true;
+                            //westLocation.Reveal();
+                            //vistedCount += 1;
+                            // Update Score
+                        }
+                    }
+                }
+
+                if (cell.Y - 1 >= 0)
+                {
+                    var northwestLocation = grid.Cells[cell.X - 1, cell.Y - 1];
+
+                    if (!northwestLocation.Live && !northwestLocation.Visited)
+                    {
+                        if (northwestLocation.LiveNeighbors == 0)
+                        {
+                            revealSurroundingCells(grid, northwestLocation.X, northwestLocation.Y);
+                        }
+                        else
+                        {
+                            northwestLocation.Visited = true;
+                            //westLocation.Reveal();
+                            //vistedCount += 1;
+                            // Update Score
+                        }
+                    }
+                }
+
             }
 
             if (cell.Y + 1 < grid.Cols)
@@ -244,6 +285,47 @@ namespace Minesweeper.Controllers
                         // Update Score
                     }
                 }
+
+                if (cell.Y + 1 < grid.Cols)
+                {
+                    var southeastLocation = grid.Cells[cell.X + 1, cell.Y + 1];
+
+                    if (!southeastLocation.Live && !southeastLocation.Visited)
+                    {
+                        if (southeastLocation.LiveNeighbors == 0)
+                        {
+                            revealSurroundingCells(grid, southeastLocation.X, southeastLocation.Y);
+                        }
+                        else
+                        {
+                            southeastLocation.Visited = true;
+                            //westLocation.Reveal();
+                            //vistedCount += 1;
+                            // Update Score
+                        }
+                    }
+                }
+
+                if (cell.Y - 1 >= 0)
+                {
+                    var northeastLocation = grid.Cells[cell.X + 1, cell.Y - 1];
+
+                    if (!northeastLocation.Live && !northeastLocation.Visited)
+                    {
+                        if (northeastLocation.LiveNeighbors == 0)
+                        {
+                            revealSurroundingCells(grid, northeastLocation.X, northeastLocation.Y);
+                        }
+                        else
+                        {
+                            northeastLocation.Visited = true;
+                            //westLocation.Reveal();
+                            //vistedCount += 1;
+                            // Update Score
+                        }
+                    }
+                }
+
             }
 
             return false;

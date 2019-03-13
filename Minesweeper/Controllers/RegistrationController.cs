@@ -1,4 +1,5 @@
-﻿using Minesweeper.Services;
+﻿
+using Minesweeper.Services;
 using System.Web.Mvc;
 
 namespace Minesweeper.Controllers
@@ -19,10 +20,13 @@ namespace Minesweeper.Controllers
             // Check for errors
             if (!ModelState.IsValid)
             {
-                return View("Register");
+                return View("Index");
+            }
+            else
+            {
+                return NewUser(submission);
             }
 
-            return NewUser(submission);
         }
 
         /// <summary>

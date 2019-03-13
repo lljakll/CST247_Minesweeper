@@ -13,14 +13,17 @@ namespace Minesweeper.Models
         // Properties
         [Required]
         [Display(Name = "First Name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Gender")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
         public string Gender { get; set; }
 
         [Required]
@@ -30,11 +33,12 @@ namespace Minesweeper.Models
 
         [Required]
         [Display(Name = "State")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 4)]
         public string State { get; set; }
 
         [Required]
         [Display(Name = "Email")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Must be valid email address")]
         public string Email { get; set; }
 
         [Required]
@@ -60,7 +64,7 @@ namespace Minesweeper.Models
             // Do nothing.
         }
 
-        public UserModel(string _firstName, string _lastName, string _gender, int _age, 
+        public UserModel(string _firstName, string _lastName, string _gender, int _age,
             string _state, string _email, string _username, string _password)
         {
             FirstName = _firstName;
