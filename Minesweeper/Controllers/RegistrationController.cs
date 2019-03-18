@@ -19,7 +19,7 @@ namespace Minesweeper.Controllers
             // Check for errors
             if (!ModelState.IsValid)
             {
-                return View("Register");
+                return View("Index");
             }
 
             return NewUser(submission);
@@ -42,7 +42,7 @@ namespace Minesweeper.Controllers
             }
             else
             {
-                // If not successfull
+                // If not successful
                 return View("Failure");
             }
         }

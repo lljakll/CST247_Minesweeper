@@ -2,10 +2,6 @@
     ViewBag.Title = "Minesweeper";
 }
 
-<h2>
-    Minesweeper
-</h2>
-
 <style>
     .gameboard table {
         border: 1px solid;
@@ -31,18 +27,7 @@
     }
 </style>
 
-@using (Html.BeginForm("SetDifficulty", "Game", FormMethod.Get))
-{
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" name="difficulty" value="Easy" class="btn btn-default" />
-            <input type="submit" name="difficulty" value="Medium" class="btn btn-default" />
-            <input type="submit" name="difficulty" value="Hard" class="btn btn-default" />
-        </div>
-    </div>
-}
-
-<div class="gameboard">
+<div id="game" class="gameboard col-md-offset-3 col-md-10">
     <table>
         @for (var y = 0; y < Model.Rows; y++)
         {
@@ -84,9 +69,10 @@
                         {
                             using (Html.BeginForm("ActivateCell", "Game", FormMethod.Post))
                             {
-                                <input type="hidden" name="id" value=@Model.Cells[x, y].Id>
-                                <input type="hidden" name="x" value=@Model.Cells[x, y].X>
-                                <input type="hidden" name="y" value=@Model.Cells[x, y].Y>
+                                <input type="hidden" id="id" name="id" value=@Model.Cells[x, y].Id>
+                                <input type="hidden" id="x" name="x" value=@Model.Cells[x, y].X>
+                                <input type="hidden" id="y" name="y" value=@Model.Cells[x, y].Y>
+
                                 <input type="image" name="submit" src="~/Content/Images/b.png" style="width:32px;height:32px;display:block;" border="0" alt="Submit" />
                             }
                         }
@@ -95,32 +81,6 @@
             </tr>
         }
     </table>
-    <br /><br />
-    @using (Html.BeginForm("ResetGrid", "Game", FormMethod.Get))
-    {
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                @if (Model.GameOver == false)
-                {
-                    @:<input type="submit" value="Reset Game" class="btn btn-default" />
-                }
-                else
-                {
-                    @:<input type="submit" value="New Game" class="btn btn-default" />
-                }
-            </div>
-        </div>
-    }
+    <br />
+
 </div>
-
-@section Scripts
-{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js">
-    </script>
-
-    <script>
-        $(function () {
-            $('#')
-        });
-    </script>
-}

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Minesweeper.Constants;
-using Minesweeper.Models;
 using Minesweeper.Models.Game;
 
 namespace Minesweeper.Controllers
@@ -19,16 +15,8 @@ namespace Minesweeper.Controllers
                 Grid grid = CreateGrid(Globals.Grid.Rows, Globals.Grid.Rows);
             }
 
-            return View("Game", Globals.Grid);
+            return View("Index", Globals.Grid);
         }
-
-        //// GET: Game
-        //public ActionResult Index(int size)
-        //{
-        //    Grid grid = createGrid(size, size);
-
-        //    return View("Game", TEMP.grid);
-        //}
 
         public Grid CreateGrid(int width, int height)
         {
@@ -47,8 +35,6 @@ namespace Minesweeper.Controllers
             // Activate the cells
             ActivateCells(20, width, height, cells, Globals.Grid);
             Globals.Grid.GameOver = false;
-
-            // Pass Grid to datalayer??
 
             return Globals.Grid;
         }
@@ -106,19 +92,9 @@ namespace Minesweeper.Controllers
 
             if (cell.Live)
             {
-                //for (int i = 0; i < Globals.Grid.Rows; i++)
-                //{
-                //    for (int j = 0; j < Globals.Grid.Cols; j++)
-                //    {
-                //        Globals.Grid.Cells[X, Y].Visited = true;
-                //    }
-                //}
-
                 EndGame();
 
                 return Index();
-
-                // System.Diagnostics.Debug.WriteLine("Hit bomb at: " + X + ", " + Y);
             }
             else
             {
@@ -128,7 +104,7 @@ namespace Minesweeper.Controllers
                 }
             }
 
-            return View("Game", Globals.Grid);
+            return View("Index", Globals.Grid);
         }
 
         private ActionResult EndGame()
@@ -254,35 +230,20 @@ namespace Minesweeper.Controllers
         {
             int size = Globals.Grid.Rows;
 
-            Globals.Grid = new Grid(0, size, size, 0, false);
+            Globals.Grid = CreateGrid(size, size);
 
             //returns view
-            return Index();
+            return PartialView("Game", Globals.Grid);
         }
 
         [HttpGet]
-        public ActionResult SetDifficulty(string difficulty)
+        public ActionResult SetDifficulty(int difficulty)
         {
-            Globals.Grid.GameOver = false;
-
-            int size = 10;
-
-            switch (difficulty)
-            {
-                case "Easy":
-                    size = 10;
-                    break;
-                case "Medium":
-                    size = 15;
-                    break;
-                case "Hard":
-                    size = 20;
-                    break;
-            }
-            Globals.Grid = new Grid(0, size, size, 0, false);
+            // Create New Grid
+            Globals.Grid = CreateGrid(difficulty, difficulty);
 
             //returns view
-            return Index();
+            return PartialView("Game", Globals.Grid);
         }
 
         public ActionResult RightClick()

@@ -1,10 +1,90 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
-<h2>Index</h2>
+
+<style>
+    .gameboard table {
+        border: 1px solid;
+        border-color: black;
+        border-collapse: collapse;
+        border: 0;
+    }
+
+    .gameboard td {
+        border-color: black;
+        border: 1px solid;
+        background-color: #BCBCBC;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        font-weight: bold;
+        vertical-align: middle;
+        padding: 0;
+    }
+
+    h2 {
+        color: black;
+    }
+</style>
+
+<h2 align="center">
+    Minesweeper
+</h2>
+
 <body>
-    @using (Html.BeginForm("Index", "Game", FormMethod.Post))
+    @using (Html.BeginForm("SetDifficulty", "Game", FormMethod.Get))
+    {
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-10">
+            <button id="easy" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 10 })' class="btn btn-default">Easy</button>
+            <button id="medium" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 15 })' class="btn btn-default">Medium</button>
+            <button id="hard" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 20 })' class="btn btn-default">Hard</button>
+        </div>
+        <br />
+    </div>
+    }
+
+    @using (Html.BeginForm("Index", "Game", FormMethod.Get))
     {
         @Html.Partial("Game");
     }
+
+    @using (Html.BeginForm("ResetGrid", "Game", FormMethod.Get))
+    {
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-10">
+                @if (Model.GameOver == false)
+                {
+                    @:<button id="reset" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default"> Reset Game</button>
+                }
+                else
+                {
+                    @:<button id="new" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default">New Game</button>
+                }
+            </div>
+        </div>
+    }
 </body>
+
+
+@section scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" type="text/javascript">
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#easy, #medium, #hard, #reset, #new, #play').on('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var $game = $('#game');
+                var url = $(this).data('url');
+
+                $.get(url, function (data) {
+                    $game.replaceWith(data);
+                });
+            });
+        });
+    </script>
+}
