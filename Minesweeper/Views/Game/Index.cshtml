@@ -34,20 +34,18 @@
 <body>
     @using (Html.BeginForm("SetDifficulty", "Game", FormMethod.Get))
     {
-    <div class="form-group">
-        <div class="col-md-offset-3 col-md-10">
-            <button id="easy" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 10 })' class="btn btn-default">Easy</button>
-            <button id="medium" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 15 })' class="btn btn-default">Medium</button>
-            <button id="hard" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 20 })' class="btn btn-default">Hard</button>
+        <div class="form-group">
+            <div class="col-md-offset-3 col-md-10">
+                <button id="easy" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 10 })' class="btn btn-default">Easy</button>
+                <button id="medium" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 15 })' class="btn btn-default">Medium</button>
+                <button id="hard" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 20 })' class="btn btn-default">Hard</button>
+            </div>
+            <br />
         </div>
-        <br />
+    }
+    <div id="game" class="col-md-offset-3 col-md-10">
+        @Html.Partial("Game")
     </div>
-    }
-
-    @using (Html.BeginForm("Index", "Game", FormMethod.Get))
-    {
-        @Html.Partial("Game");
-    }
 
     @using (Html.BeginForm("ResetGrid", "Game", FormMethod.Get))
     {
@@ -55,7 +53,7 @@
             <div class="col-md-offset-3 col-md-10">
                 @if (Model.GameOver == false)
                 {
-                    @:<button id="reset" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default"> Reset Game</button>
+                    @:<button id="reset" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default">Reset Game</button>
                 }
                 else
                 {
@@ -74,7 +72,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#easy, #medium, #hard, #reset, #new, #play').on('click', function (event) {
+            $('#easy, #medium, #hard, #reset, #new').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
@@ -85,6 +83,7 @@
                     $game.replaceWith(data);
                 });
             });
+
         });
     </script>
 }
