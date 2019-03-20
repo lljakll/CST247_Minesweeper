@@ -80,8 +80,8 @@ namespace Minesweeper.Controllers
 
         //public ActionResult
 
-        [HttpPost]
-        public ActionResult ActivateCell(string id, string x, string y)
+        [HttpGet]
+        public PartialViewResult ActivateCell(string id, string x, string y)
         {
             int X = int.Parse(x.Trim());
             int Y = int.Parse(y.Trim());
@@ -94,7 +94,7 @@ namespace Minesweeper.Controllers
             {
                 EndGame();
 
-                return Index();
+                return null;
             }
             else
             {
@@ -104,7 +104,8 @@ namespace Minesweeper.Controllers
                 }
             }
 
-            return View("Index", Globals.Grid);
+            return PartialView("Game", Globals.Grid);
+            //return View("Index", Globals.Grid);
         }
 
         private ActionResult EndGame()

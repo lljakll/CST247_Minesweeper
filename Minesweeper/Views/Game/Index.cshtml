@@ -1,5 +1,8 @@
-﻿@{
+﻿@model  Minesweeper.Models.Game.Grid
+
+@{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
@@ -31,20 +34,12 @@
     Minesweeper
 </h2>
 
-<body>
-    @using (Html.BeginForm("SetDifficulty", "Game", FormMethod.Get))
-    {
-        <div class="form-group">
-            <div class="col-md-offset-3 col-md-10">
-                <button id="easy" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 10 })' class="btn btn-default">Easy</button>
-                <button id="medium" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 15 })' class="btn btn-default">Medium</button>
-                <button id="hard" data-url='@Url.Action("SetDifficulty", "Game", new { difficulty = 20 })' class="btn btn-default">Hard</button>
-            </div>
-            <br />
-        </div>
-    }
-    <div id="game" class="col-md-offset-3 col-md-10">
-        @Html.Partial("Game")
+<div class="gameboard">
+
+    <div id="gameboard">
+
+        @{ Html.RenderPartial("Game", Model); }
+
     </div>
 
     @using (Html.BeginForm("ResetGrid", "Game", FormMethod.Get))
@@ -62,7 +57,9 @@
             </div>
         </div>
     }
-</body>
+
+</div>
+
 
 
 @section scripts
@@ -72,11 +69,11 @@
 
     <script>
         $(document).ready(function () {
-            $('#easy, #medium, #hard, #reset, #new').on('click', function (event) {
+            $('#reset, #new').on('click', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
-                var $game = $('#game');
+                var $game = $('#gameboard');
                 var url = $(this).data('url');
 
                 $.get(url, function (data) {
