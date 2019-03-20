@@ -80,7 +80,7 @@ namespace Minesweeper.Controllers
 
         //public ActionResult
 
-        [HttpGet]
+        [HttpPost]
         public PartialViewResult ActivateCell(string id, string x, string y)
         {
             int X = int.Parse(x.Trim());
