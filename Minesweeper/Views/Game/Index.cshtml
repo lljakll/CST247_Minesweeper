@@ -34,7 +34,22 @@
     Minesweeper
 </h2>
 
-<div class="gameboard">
+<div class="gameboard" align="center">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <h4>
+                    Time: 
+                </h4>
+            </div>
+            <div class="col-sm">
+                <h4>
+                    Score: 
+                </h4>
+            </div>
+        </div>
+    </div>
 
     <div id="gameboard">
 
@@ -42,17 +57,17 @@
 
     </div>
 
-    @using (Html.BeginForm("ResetGrid", "Game", FormMethod.Get))
+    @using (Ajax.BeginForm("ResetGrid", "Game", new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "gameboard" }))
     {
         <div class="form-group">
             <div class="col-md-offset-3 col-md-10">
                 @if (Model.GameOver == false)
                 {
-                    @:<button id="reset" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default">Reset Game</button>
+                    @:<button id="reset" class="btn btn-default">Reset Game</button>
                 }
                 else
                 {
-                    @:<button id="new" data-url='@Url.Action("ResetGrid", "Game")' class="btn btn-default">New Game</button>
+                    @:<button id="new" class="btn btn-default">New Game</button>
                 }
             </div>
         </div>
@@ -68,21 +83,4 @@
     </script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#reset, #new').on('click', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-
-                var $game = $('#gameboard');
-                var url = $(this).data('url');
-
-                $.get(url, function (data) {
-                    $game.replaceWith(data);
-                });
-            });
-
-        });
-    </script>
 }

@@ -92,9 +92,7 @@ namespace Minesweeper.Controllers
 
             if (cell.Live)
             {
-                EndGame();
-
-                return null;
+                return EndGame();
             }
             else
             {
@@ -108,11 +106,11 @@ namespace Minesweeper.Controllers
             //return View("Index", Globals.Grid);
         }
 
-        private ActionResult EndGame()
+        private PartialViewResult EndGame()
         {
             RevealAll();
 
-            return Index();
+            return PartialView("Game", Globals.Grid);
         }
 
         private void RevealAll()
@@ -237,15 +235,32 @@ namespace Minesweeper.Controllers
             return PartialView("Game", Globals.Grid);
         }
 
-        [HttpGet]
-        public ActionResult SetDifficulty(int difficulty)
-        {
-            // Create New Grid
-            Globals.Grid = CreateGrid(difficulty, difficulty);
+        //[HttpPost]
+        //public ActionResult SetDifficulty(string difficulty)
+        //{
+        //    // Default
+        //    int toughness = 10;
 
-            //returns view
-            return PartialView("Game", Globals.Grid);
-        }
+        //    if (difficulty.Equals("Easy"))
+        //    {
+        //        toughness = 10;
+        //    }
+
+        //    if (difficulty.Equals("Medium"))
+        //    {
+        //        toughness = 15;
+        //    }
+
+        //    if (difficulty.Equals("Hard"))
+        //    {
+        //        toughness = 20;
+        //    }
+        //    // Create New Grid
+        //    Globals.Grid = CreateGrid(toughness, toughness);
+
+        //    //returns view
+        //    return PartialView("Game", Globals.Grid);
+        //}
 
         public ActionResult RightClick()
         {
