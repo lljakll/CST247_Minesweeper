@@ -26,10 +26,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
 
                     @{
-                        // Temporary code. Need to handle once cookie is available
-                        var test = true;
-
-                        if (test)
+                        if (ViewBag.user == null)
                         {
                             @:<li>@Html.ActionLink("Sign In", "Login", "Login")</li>
                         }

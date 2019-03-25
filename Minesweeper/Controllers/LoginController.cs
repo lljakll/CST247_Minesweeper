@@ -89,7 +89,12 @@ namespace Minesweeper.Controllers
                 // If user name and password match input, then success!
                 if (user.Username.Equals(username) && user.Password.Equals(password))
                 {
-                    return View("Success", user);
+                    Session["user"] = user.Username;
+                    Session.Timeout = 20;
+
+                    ViewBag.Username = Session["user"];
+
+                    return View("Success");
                 }
             }
             catch
@@ -99,6 +104,13 @@ namespace Minesweeper.Controllers
 
             // Failure to login with correct credentials and possible other errors.
             return View("Failure");
+        }
+
+        private ActionResult Logout()
+        {
+            Session.Abandon();
+
+            return View("Index", "Home");
         }
     }
 }

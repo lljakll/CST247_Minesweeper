@@ -13,6 +13,7 @@ namespace Minesweeper.Models.Game
         public int UserId { get; set; }
         public bool GameOver { get; set; }
         public Cell[,] Cells { get; set; }
+        public int ClickCount { get; set; }
 
         public Grid(int id, int rows, int cols, int userId, bool gameOver)
         {
@@ -21,6 +22,8 @@ namespace Minesweeper.Models.Game
             Cols = cols;
             UserId = userId;
             GameOver = gameOver;
+
+            ClickCount = 0;
         }
 
         public void SetLiveCount()

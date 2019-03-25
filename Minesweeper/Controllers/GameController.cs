@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Minesweeper.Constants;
 using Minesweeper.Models.Game;
+using Minesweeper.Services;
 
 namespace Minesweeper.Controllers
 {
@@ -87,6 +88,11 @@ namespace Minesweeper.Controllers
             int Y = int.Parse(y.Trim());
 
             Cell cell = Globals.Grid.Cells[X, Y];
+
+            if (cell.Visited == false)
+            {
+                Globals.Grid.ClickCount += 1;
+            }
 
             cell.Visited = true;
 
@@ -224,7 +230,6 @@ namespace Minesweeper.Controllers
             return false;
         }
 
-        [HttpGet]
         public ActionResult ResetGrid()
         {
             int size = Globals.Grid.Rows;
@@ -232,7 +237,8 @@ namespace Minesweeper.Controllers
             Globals.Grid = CreateGrid(size, size);
 
             //returns view
-            return PartialView("Game", Globals.Grid);
+            // return PartialView("Game", Globals.Grid);
+            return Index();
         }
 
         //[HttpPost]
@@ -265,6 +271,23 @@ namespace Minesweeper.Controllers
         public ActionResult RightClick()
         {
             return View("None");
+        }
+
+        public ActionResult SaveGame()
+        {
+            // Get database service
+            DatabaseService dbService = new DatabaseService();
+
+            string username = Session["user"].ToString();
+
+            if (Session["user"] != null)
+            {
+                dbService.SaveGame(username, 1, 1, "another test");
+            }
+
+            ViewBag.Username = username;
+
+            return View("Account");
         }
 
     }

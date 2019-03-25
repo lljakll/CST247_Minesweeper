@@ -44,7 +44,9 @@ namespace Minesweeper.Services
                     {
                         CommandText =
                         "INSERT INTO users (username, password, firstname, lastname, gender, age, state, email)" +
-                        "VALUES (@username, @password, @firstname, @lastname, @gender, @age, @state, @email)"
+                        "VALUES (@username, @password, @firstname, @lastname, @gender, @age, @state, @email);" +
+                        "INSERT INTO saved_games(username, time, clicks, game_data)" +
+                        "VALUES (@username, NULL, NULL, NULL);"
                     };
 
                     // Set the parameters
@@ -67,6 +69,23 @@ namespace Minesweeper.Services
                 {
                     // Return false if any issues.
                     return false;
+                }
+
+                try
+                {
+                    // Set the command text
+                    SqlCommand command = new SqlCommand(null, service.Connection)
+                    {
+                        CommandText =
+                        "INSERT INTO saved_games (username, time, clicks, game_data)" +
+                        "VALUES (@username, NULL, NULL, NULL)"
+                    };
+
+                    command.Parameters.Add("@username", SqlDbType.VarChar, 50).Value = user.Username;
+                }
+                catch
+                {
+
                 }
             }
 
@@ -226,6 +245,49 @@ namespace Minesweeper.Services
 
             // On success, return true.
             return true;
+        }
+
+        public bool SaveGame(string username, long time, int clicks, string game_data)
+        {
+            // setup service
+            using (ConnectionService service = new ConnectionService())
+            {
+                try
+                {
+                    // Open connection to database
+                    service.Connection.Open();
+
+                    // Create statement
+                    SqlCommand command = new SqlCommand(null, service.Connection)
+                    {
+                        CommandText =
+                        "UPDATE saved_games " +
+                        "SET time = @time, " +
+                        "clicks = @clicks, " +
+                        "game_data = @gamedata " +
+                        "WHERE username = @username;"
+                    };
+
+                    // Setup parameters
+                    command.Parameters.Add("@username", SqlDbType.VarChar, 50).Value = username;
+                    command.Parameters.Add("@time", SqlDbType.BigInt, 0).Value = time;
+                    command.Parameters.Add("@clicks", SqlDbType.Int, 0).Value = clicks;
+                    command.Parameters.Add("@gamedata", SqlDbType.Text, 5000).Value = game_data;
+
+                    // Prepare the statement
+                    command.Prepare();
+
+                    // Execute statement.
+                    command.ExecuteNonQuery();
+                }
+                catch
+                {
+                    // If any issues, return false
+                    return false;
+                }
+            }
+
+            return false;
         }
     }
 }

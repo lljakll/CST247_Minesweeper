@@ -34,48 +34,67 @@
     Minesweeper
 </h2>
 
-<div class="gameboard" align="center">
+<div class="container-fluid">
+    <div class="row">
+        <!-- TITLE -->
+    </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
+    <div class="row">
+        <div class="col-sm-3">
+            <!-- Buttons and Timer -->
+            <div>
                 <h4>
-                    Time: 
+                    Time: <label id="timer">00:00:00</label>
                 </h4>
             </div>
-            <div class="col-sm">
-                <h4>
-                    Score: 
-                </h4>
+
+            <br />
+            <br />
+
+            @using (Html.BeginForm("ResetGrid", "Game"))
+            {
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-10">
+                        @if (Model.GameOver == false)
+                        {
+                            @:<button id="reset" class="btn btn-default">Reset Game</button>
+                        }
+                        else
+                        {
+                            @:<button id="new" class="btn btn-default">New Game</button>
+                        }
+                    </div>
+                </div>
+            }
+
+            <br />
+            <br />
+
+            @using (Html.BeginForm("SaveGame", "Game"))
+            {
+                <div class="form-group" id="save">
+                    <div class="col-md-offset-3 col-md-10">
+                        <button id="save" class="btn btn-default">
+                            Save & Quit
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-sm-9">
+            <!-- Gameboard -->
+            <div class="gameboard" align="center">
+
+                <div id="gameboard">
+
+                    @{ Html.RenderPartial("Game", Model); }
+
+                </div>
             </div>
         </div>
     </div>
-
-    <div id="gameboard">
-
-        @{ Html.RenderPartial("Game", Model); }
-
-    </div>
-
-    @using (Ajax.BeginForm("ResetGrid", "Game", new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "gameboard" }))
-    {
-        <div class="form-group">
-            <div class="col-md-offset-3 col-md-10">
-                @if (Model.GameOver == false)
-                {
-                    @:<button id="reset" class="btn btn-default">Reset Game</button>
-                }
-                else
-                {
-                    @:<button id="new" class="btn btn-default">New Game</button>
-                }
-            </div>
-        </div>
-    }
-
 </div>
-
-
 
 @section scripts
 {
@@ -83,4 +102,43 @@
     </script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+    <script>
+        var countDate = localStorage.getItem('startDate');
+
+        countDate = new Date();
+        localStorage.setItem('startDate', countDate);
+
+        var x = setInterval(function () {
+
+            var now = new Date().getTime();
+
+            var distance = now - countDate.getTime();
+
+            var hours = "";
+            var minutes = "";
+            var seconds = "";
+
+            hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (seconds < 10) {
+                seconds = "0" + seconds;
+            }
+
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+
+            document.getElementById("timer").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+        }, 1000);
+
+
+    </script>
 }
