@@ -62,7 +62,11 @@ namespace Minesweeper.Controllers
 
         public ActionResult Game()
         {
-            Globals.Grid = new Models.Game.Grid(0, 10, 10, 0, false);
+            string user = "";
+
+            user = Session["user"].ToString();
+
+            Globals.Grid = new Models.Game.Grid(user, 10, 10, 0, false);
 
             return RedirectToAction("Index", "Game");
         }

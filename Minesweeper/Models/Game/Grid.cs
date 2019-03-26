@@ -7,7 +7,7 @@ namespace Minesweeper.Models.Game
 {
     public class Grid
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int Rows { get; set; }
         public int Cols { get; set; }
         public int UserId { get; set; }
@@ -15,13 +15,25 @@ namespace Minesweeper.Models.Game
         public Cell[,] Cells { get; set; }
         public int ClickCount { get; set; }
 
-        public Grid(int id, int rows, int cols, int userId, bool gameOver)
+        public Grid(string id, int rows, int cols, int userId, bool gameOver)
         {
             Id = id;
             Rows = rows;
             Cols = cols;
             UserId = userId;
             GameOver = gameOver;
+
+            ClickCount = 0;
+        }
+
+        public Grid(string id, int rows, int cols, int userId, bool gameOver, Cell[,] cells)
+        {
+            Id = id;
+            Rows = rows;
+            Cols = cols;
+            UserId = userId;
+            GameOver = gameOver;
+            Cells = cells;
 
             ClickCount = 0;
         }

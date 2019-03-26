@@ -13,16 +13,16 @@ namespace Minesweeper.Controllers
         {
             if (Globals.Grid.GameOver == false)
             {
-                Grid grid = CreateGrid(Globals.Grid.Rows, Globals.Grid.Rows);
+                Grid grid = CreateGrid(Session["user"].ToString(), Globals.Grid.Rows, Globals.Grid.Rows);
             }
 
             return View("Index", Globals.Grid);
         }
 
-        public Grid CreateGrid(int width, int height)
+        public Grid CreateGrid(string username, int width, int height)
         {
             // Grid(id, w, h, userid, gameover)
-            Globals.Grid = new Grid(0, width, height, 0, false);
+            Globals.Grid = new Grid(Session["user"].ToString(), width, height, 0, false);
             Cell[,] cells = new Cell[width, height];
 
             for (int y = 0; y < height; y++)
@@ -30,6 +30,7 @@ namespace Minesweeper.Controllers
                 for (int x = 0; x < width; x++)
                 {
                     cells[x, y] = new Cell(x, y);
+                    cells[x, y].Id = username;
                 }
             }
 
@@ -234,7 +235,7 @@ namespace Minesweeper.Controllers
         {
             int size = Globals.Grid.Rows;
 
-            Globals.Grid = CreateGrid(size, size);
+            Globals.Grid = CreateGrid(Session["user"].ToString(), size, size);
 
             //returns view
             // return PartialView("Game", Globals.Grid);
@@ -277,17 +278,40 @@ namespace Minesweeper.Controllers
         {
             // Get database service
             DatabaseService dbService = new DatabaseService();
+            GameServices gameService = new GameServices();
 
             string username = Session["user"].ToString();
 
-            if (Session["user"] != null)
-            {
-                dbService.SaveGame(username, 1, 1, "another test");
-            }
+            dbService.SaveGame(
+                username, 
+                1, 
+                Globals.Grid.ClickCount, 
+                gameService.ConvertToText(
+                    Globals.Grid.Cells, 
+                    Globals.Grid.Rows, 
+                    Globals.Grid.Cols));
 
             ViewBag.Username = username;
 
             return View("Account");
+        }
+
+        public ActionResult ContinueGame()
+        {
+            string username = Session["user"].ToString();
+
+            DatabaseService dbService = new DatabaseService();
+            Globals.Grid = new Grid("", 0, 0, 0, false);
+
+            // get grid from database
+            Globals.Grid = dbService.GetSavedGrid(username);
+
+            return View("Index", Globals.Grid);
+        }
+
+        public ActionResult NewGame()
+        {
+            return null;
         }
 
     }

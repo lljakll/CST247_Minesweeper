@@ -11,7 +11,7 @@ namespace Minesweeper.Services
         public Grid CreateGrid(Grid grid, int width, int height)
         {
             // Create new grid object
-            grid = new Grid(0, width, height, 0, false);
+            grid = new Grid("", width, height, 0, false);
 
             // Create cell matrix
             Cell[,] cells = new Cell[width, height];
@@ -34,6 +34,18 @@ namespace Minesweeper.Services
 
             return grid;
         }
+
+        public Grid CreateGrid(Cell[,] cells, Grid grid, int width, int height)
+        {
+            // Create new grid object
+            grid = new Grid("", width, height, 0, false, cells)
+            {
+                GameOver = false
+            };
+
+            return grid;
+        }
+
 
         public void PopulateMinefield(int percentage, int width, int height, Cell[,] cells, Grid grid)
         {
@@ -201,6 +213,77 @@ namespace Minesweeper.Services
                         // Update Score
                     }
                 }
+            }
+
+            return false;
+        }
+
+        public string ConvertToString(Cell cell)
+        {
+            return cell.Id + "," +
+                cell.X + "," +
+                cell.Y + "," +
+                cell.LiveNeighbors + "," +
+                cell.Visited.ToString() + "," +
+                cell.Live.ToString() + ";";
+        }
+
+        public string ConvertToText(Cell[,] cells, int rows, int cols)
+        {
+            string output = "";
+
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    output = output + ConvertToString(cells[i, j]);
+                }
+            }
+
+            return output;
+        }
+
+        public Cell[,] ConvertToArray(string input, int rows, int cols)
+        {
+            string[] output = input.Split(
+                new[] { ';' }, 
+                StringSplitOptions.RemoveEmptyEntries);
+
+            Cell[,] cells = new Cell[rows, cols];
+
+            foreach (string s in output)
+            {
+                Cell cell = ExtractCell(s);
+
+                cells[cell.X, cell.Y] = cell;
+            }
+
+            return cells;
+        }
+
+        public Cell ExtractCell(string input)
+        {
+            string[] output = input.Split(
+                new[] { ',' },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            string id = output[0];
+
+            int.TryParse(output[1], out int x);
+            int.TryParse(output[2], out int y);
+            int.TryParse(output[3], out int liveNeighbors);
+
+            bool visited = GetBool(output[4]);
+            bool live = GetBool(output[5]);
+
+            return new Cell(id, x, y, liveNeighbors, visited, live);
+        }
+
+        private bool GetBool(string type)
+        {
+            if (type.Equals("True"))
+            {
+                return true;
             }
 
             return false;

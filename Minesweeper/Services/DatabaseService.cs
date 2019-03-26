@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using Minesweeper.Models;
 using System.Data.SqlClient;
+using Minesweeper.Models.Game;
+using Minesweeper.Constants;
 
 /// <summary>
 /// DatabaseService Class
@@ -288,6 +290,52 @@ namespace Minesweeper.Services
             }
 
             return false;
+        }
+
+        public Grid GetSavedGrid(string username)
+        {
+            string grid_data = "";
+
+            using (ConnectionService service = new ConnectionService())
+            {
+                //try
+                //{
+                    // Open connection to database
+                    service.Connection.Open();
+
+                    // SQL statement
+                    SqlCommand command = new SqlCommand(null, service.Connection)
+                    {
+                        CommandText =
+                        "SELECT * FROM saved_games WHERE username = @username"
+                    };
+
+                    // Setup parameter
+                    command.Parameters.Add("@username", SqlDbType.VarChar, 50).Value = username;
+
+                    // Prepare the statement
+                    command.Prepare();
+
+                    // Exececute query using reader
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    // Iterate through valuse stored in reader
+                    while (reader.Read())
+                    {
+                        grid_data = reader["game_data"].ToString();
+                    }
+                //}
+                //catch
+                //{
+                    // If issues, return null
+                //    return null;
+                //}
+            }
+
+            GameServices gameServices = new GameServices();
+
+            return gameServices.CreateGrid(
+                gameServices.ConvertToArray(grid_data, 10, 10), Globals.Grid, 10, 10);
         }
     }
 }
