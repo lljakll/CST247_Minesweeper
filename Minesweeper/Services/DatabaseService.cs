@@ -249,7 +249,7 @@ namespace Minesweeper.Services
             return true;
         }
 
-        public bool SaveGame(string username, long time, int clicks, string game_data)
+        public bool SaveGame(string username, int time, int clicks, string game_data)
         {
             // setup service
             using (ConnectionService service = new ConnectionService())
@@ -272,7 +272,7 @@ namespace Minesweeper.Services
 
                     // Setup parameters
                     command.Parameters.Add("@username", SqlDbType.VarChar, 50).Value = username;
-                    command.Parameters.Add("@time", SqlDbType.BigInt, 0).Value = time;
+                    command.Parameters.Add("@time", SqlDbType.Int, 0).Value = time;
                     command.Parameters.Add("@clicks", SqlDbType.Int, 0).Value = clicks;
                     command.Parameters.Add("@gamedata", SqlDbType.Text, 5000).Value = game_data;
 
@@ -295,6 +295,8 @@ namespace Minesweeper.Services
         public Grid GetSavedGrid(string username)
         {
             string grid_data = "";
+            int clicks = 0;
+            int timeInSeconds = 0;
 
             using (ConnectionService service = new ConnectionService())
             {
@@ -323,6 +325,8 @@ namespace Minesweeper.Services
                     while (reader.Read())
                     {
                         grid_data = reader["game_data"].ToString();
+                        int.TryParse(reader["clicks"].ToString(), out clicks);
+                        int.TryParse(reader["time"].ToString(), out timeInSeconds);
                     }
                 //}
                 //catch
@@ -334,8 +338,12 @@ namespace Minesweeper.Services
 
             GameServices gameServices = new GameServices();
 
-            return gameServices.CreateGrid(
+            Grid grid = gameServices.CreateGrid(
                 gameServices.ConvertToArray(grid_data, 10, 10), Globals.Grid, 10, 10);
+
+            grid.ClickCount = clicks;
+
+            return grid;
         }
     }
 }

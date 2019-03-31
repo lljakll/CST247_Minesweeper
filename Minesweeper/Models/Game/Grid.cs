@@ -14,6 +14,7 @@ namespace Minesweeper.Models.Game
         public bool GameOver { get; set; }
         public Cell[,] Cells { get; set; }
         public int ClickCount { get; set; }
+        public int TimeInSeconds { get; set; }
 
         public Grid(string id, int rows, int cols, int userId, bool gameOver)
         {

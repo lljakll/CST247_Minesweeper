@@ -104,16 +104,15 @@
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 
     <script>
-        var countDate = localStorage.getItem('startDate');
 
-        countDate = new Date();
-        localStorage.setItem('startDate', countDate);
+        var countDate = new Date().getTime();
+        //localStorage.setItem('startDate', countDate);
 
         var x = setInterval(function () {
 
             var now = new Date().getTime();
 
-            var distance = now - countDate.getTime();
+            var distance = now - countDate;
 
             var hours = "";
             var minutes = "";

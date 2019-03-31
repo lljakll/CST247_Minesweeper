@@ -16,6 +16,12 @@ namespace Minesweeper.Controllers
                 Grid grid = CreateGrid(Session["user"].ToString(), Globals.Grid.Rows, Globals.Grid.Rows);
             }
 
+            Session["time_a"] = DateTime.Now;
+
+            ViewBag.Time = Session["time_a"];
+
+            ViewBag.SavedTime = DateTime.Now.AddMinutes(-10).ToString();
+
             return View("Index", Globals.Grid);
         }
 
@@ -276,15 +282,37 @@ namespace Minesweeper.Controllers
 
         public ActionResult SaveGame()
         {
+            // Calc Time
+            DateTime a = DateTime.Parse(Session["time_a"].ToString());
+            DateTime b = DateTime.Now;
+
             // Get database service
             DatabaseService dbService = new DatabaseService();
             GameServices gameService = new GameServices();
+
+            // handle Time
+            int timeInSeconds = (int)b.Subtract(a).TotalSeconds;
+
+            // Store Time
+            Globals.Grid.TimeInSeconds = timeInSeconds;
+
+            // Parse Time
+            string totalTime = "";
+
+            TimeSpan time = TimeSpan.FromSeconds(timeInSeconds);
+
+            totalTime = string.Format("{0:D2}:{1:D2}:{2:D2}",
+                time.Hours,
+                time.Minutes,
+                time.Seconds);
+
+            ViewBag.TotalTime = totalTime;
 
             string username = Session["user"].ToString();
 
             dbService.SaveGame(
                 username, 
-                1, 
+                timeInSeconds, 
                 Globals.Grid.ClickCount, 
                 gameService.ConvertToText(
                     Globals.Grid.Cells, 
@@ -293,7 +321,7 @@ namespace Minesweeper.Controllers
 
             ViewBag.Username = username;
 
-            return View("Account");
+            return View("Account", Globals.Grid);
         }
 
         public ActionResult ContinueGame()
